@@ -10,7 +10,8 @@
  * Requires Plugins: two-factor
  */
 
-add_action('plugins_loaded', function (): void {
+function force2f_loaded(): void
+{
     include_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
 
     YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
@@ -18,12 +19,15 @@ add_action('plugins_loaded', function (): void {
         __FILE__,
         'force-two-factor'
     );
-});
+}
+add_action('plugins_loaded', 'force2f_loaded');
 
-add_action('two_factor_enabled_providers_for_user', function (array $providers): array {
+function force2f_providers(array $providers): array
+{
     if (empty($providers) && class_exists('Two_Factor_Email')) {
         $providers[] = 'Two_Factor_Email';
     }
 
     return $providers;
-});
+}
+add_action('two_factor_enabled_providers_for_user', 'force2f_providers');
