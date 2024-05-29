@@ -10,6 +10,16 @@
  * Requires Plugins: two-factor
  */
 
+add_action('plugins_loaded', function (): void {
+    include_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
+
+    YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
+        'https://github.com/wearefixel/force-two-factor',
+        __FILE__,
+        'force-two-factor'
+    );
+});
+
 add_action('two_factor_enabled_providers_for_user', function (array $providers): array {
     if (empty($providers) && class_exists('Two_Factor_Email')) {
         $providers[] = 'Two_Factor_Email';
